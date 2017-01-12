@@ -83,7 +83,7 @@ header div {
 }
 
 section.content {
-	min-height: 80%;
+	max-height: 80%;
 	width: 100%;
 	border-bottom: 1px solid #3F4D60;
 	overflow: auto;
@@ -91,6 +91,7 @@ section.content {
 
 section.content .other, section.content .mine {
 	margin: 15px;
+	display: block;
 }
 
 section.content .other p, section.content .mine p {
@@ -118,7 +119,7 @@ section.content .mine p {
 
 section.content .mine .post {
 	width: 80%;
-	float: right;
+	margin-left: 14%;
 	background: #338DC4;
 	padding: 10px 25px;
 }

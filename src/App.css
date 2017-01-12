@@ -1,24 +1,155 @@
-.App {
-  text-align: center;
+html, body {
+	padding: 0;
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+	overflow: hidden;
+	box-sizing: border-box;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+main {
+	width: 100%;
+	height: 100vh;
+	margin: auto;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+main.page-connect {
+	background-color: #3F4D60;
 }
 
-.App-intro {
-  font-size: large;
+main.page-chat {
+	background-color: #FFF;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.logo img {
+	width: 40%;
+	margin: auto;
+	display: block;
+	padding: 10% 0;
+}
+
+.connect {
+	position: absolute;
+	bottom: 100px;
+	height: 400px;
+}
+
+input:focus {
+	border-color: #F93B26;
+}
+
+input, a {
+	width: 60%;
+	display: block;
+	margin: 20px auto;
+	padding: 20px 40px;
+}
+
+
+a {
+	/*background: #2682F9;*/
+	background: #F93B26;
+	text-align: center;
+	color: #FFF;
+	font-weight: 700;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+a:hover {
+	background: #D13024;
+	transition: 0.3s ease;
+}
+
+
+/* PAGE DE CHAT */
+
+header {
+	background: #3F4D60;
+	height: 7%;
+	width: 100%;
+	border: 1px solid #3F4D60;
+}
+
+header div {
+	float: right;
+	height: 20px;
+	width: 20px;
+	margin-right: 50px;
+	border-radius: 50%;
+	background: #F93B26;
+	position: relative;
+	top: 50%;
+	transform: translate(50%, -50%);
+}
+
+section.content {
+	max-height: 80%;
+	width: 100%;
+	border-bottom: 1px solid #3F4D60;
+	overflow: auto;
+}
+
+section.content .other, section.content .mine {
+	margin: 15px;
+	display: block;
+}
+
+section.content .other p, section.content .mine p {
+	width: auto;
+	color: gray;
+	font-size: 20px;
+	font-style: italic;
+}
+
+section.content .other .post {
+	width: 80%;
+	background: #32C0C6;
+	padding: 10px 25px;
+}
+
+section.content .other .post p, section.content .mine .post p {
+	color: #FFF;
+	font-style: normal;
+	font-size: 35px;
+}
+
+section.content .mine p {
+	text-align: right;
+}
+
+section.content .mine .post {
+	width: 80%;
+	margin-left: 14%;
+	background: #338DC4;
+	padding: 10px 25px;
+}
+
+section.content .mine .post p {
+	text-align: left;
+}
+
+section.write-message {
+	height: 13%;
+	width: 100%;
+}
+
+section.write-message textarea {
+	width: 80%;
+	height: 94%;
+	margin: 0;
+	float: left;
+	box-sizing: border-box;
+}
+
+section.write-message button{
+	width: 20%;
+	margin: 0;
+	float: left;
+	padding: 0;
+	height: 100%;
+	background: #3F4D60;
+	border-color: #3F4D60;
+	color: #FFF;
+	cursor: pointer;
+	box-sizing: border-box;
 }

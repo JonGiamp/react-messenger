@@ -5,7 +5,7 @@ export default React.createClass({
     return(
       <main className="page-chat">
     		<header>
-    			<div></div>
+    			<div>{this.props.params.username}</div>
     		</header>
     		<section className="content">
     			<div className="other">

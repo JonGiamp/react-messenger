@@ -24,7 +24,8 @@ main.page-chat {
 	width: 40%;
 	margin: auto;
 	display: block;
-	padding: 40% 0;
+	padding: 30% 0;
+	font-family: roboto;
 }
 
 .connect {

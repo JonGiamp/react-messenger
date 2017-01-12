@@ -5,19 +5,6 @@ import Connect from './Connect.js';
 import Chatroom from './Chatroom.js';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      name: ""
-    };
-  }
-
-  setName(name) {
-    this.setState({
-      name: this.name
-    });
-  }
-
   render() {
     return (
       <div>
@@ -31,7 +18,7 @@ render((
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Connect} />
-      <Route path="chatroom" component={Chatroom} />
+      <Route path="/chatroom/:username" component={Chatroom} />
     </Route>
   </Router>
 ), document.body)

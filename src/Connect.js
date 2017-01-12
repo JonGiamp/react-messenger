@@ -20,9 +20,7 @@ class Connect extends Component {
 
   handleSubmit(event) {
     if(this.state.name)
-      alert('A name was submitted: ' + this.state.name);
-    // Maintenant je dois passer this.state.name en params à l'URL
-    event.preventDefault();
+      this.props.router.push(`/chatroom/${this.state.name}`);
   }
 
   render() {
@@ -33,7 +31,7 @@ class Connect extends Component {
         </div>
         <div className="connect">
           <input type="text" placeholder="Entrez votre pseudo..." value={this.state.value} onChange={this.handleChange} />
-          <Link to="/chatroom" onClick={this.handleSubmit}>Connexion</Link>
+          <button onClick={this.handleSubmit}>Connexion</button>
         </div>
       </main>
     );

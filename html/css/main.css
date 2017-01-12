@@ -24,7 +24,7 @@ main.page-chat {
 	width: 40%;
 	margin: auto;
 	display: block;
-	padding: 10% 0;
+	padding: 40% 0;
 }
 
 .connect {
@@ -37,7 +37,7 @@ input:focus {
 	border-color: #F93B26;
 }
 
-input, a {
+input, .btn {
 	width: 60%;
 	display: block;
 	margin: 20px auto;
@@ -45,7 +45,7 @@ input, a {
 }
 
 
-a {
+.btn {
 	/*background: #2682F9;*/
 	background: #F93B26;
 	text-align: center;
@@ -55,7 +55,7 @@ a {
 	text-decoration: none;
 }
 
-a:hover {
+.btn:hover {
 	background: #D13024;
 	transition: 0.3s ease;
 }
@@ -72,11 +72,12 @@ header {
 
 header div {
 	float: right;
-	height: 20px;
-	width: 20px;
-	margin-right: 50px;
+	height: 15px;
+	width: 15px;
+	margin-right: 30px;
 	border-radius: 50%;
-	background: #F93B26;
+	background: transparent;
+	border: 2px solid #FFF;
 	position: relative;
 	top: 50%;
 	transform: translate(50%, -50%);
@@ -90,27 +91,27 @@ section.content {
 }
 
 section.content .other, section.content .mine {
-	margin: 15px;
+	margin: 15px 30px;
 	display: block;
 }
 
-section.content .other p, section.content .mine p {
+section.content .other p.date, section.content .mine p.date {
 	width: auto;
 	color: gray;
-	font-size: 20px;
 	font-style: italic;
+	font-size: 8px;
 }
 
-section.content .other .post {
-	width: 80%;
+section.content .other .post, section.content .mine .post{
+	max-width: 80%;
 	background: #32C0C6;
-	padding: 10px 25px;
+	padding: 1px 15px;
+	border-radius: 20px;
 }
 
 section.content .other .post p, section.content .mine .post p {
 	color: #FFF;
 	font-style: normal;
-	font-size: 35px;
 }
 
 section.content .mine p {
@@ -118,10 +119,8 @@ section.content .mine p {
 }
 
 section.content .mine .post {
-	width: 80%;
 	margin-left: 14%;
 	background: #338DC4;
-	padding: 10px 25px;
 }
 
 section.content .mine .post p {
@@ -135,10 +134,13 @@ section.write-message {
 
 section.write-message textarea {
 	width: 80%;
-	height: 94%;
+	height: 100%;
 	margin: 0;
 	float: left;
 	box-sizing: border-box;
+	padding: 20px;
+	border-radius: 0;
+	border: none;
 }
 
 section.write-message button{
@@ -152,4 +154,8 @@ section.write-message button{
 	color: #FFF;
 	cursor: pointer;
 	box-sizing: border-box;
+}
+
+section.write-message button img{
+	width: 40%;
 }

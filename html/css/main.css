@@ -1,0 +1,52 @@
+html, body {
+	padding: 0;
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+}
+
+main {
+	width: 800px;
+	height: 100vh;
+	margin: auto;
+	background-color: #3F4D60;
+}
+
+.logo img {
+	width: 40%;
+	margin: auto;
+	display: block;
+	padding: 10% 0;
+}
+
+.connect {
+	position: absolute;
+	bottom: 100px;
+	height: 400px;
+}
+
+input:focus {
+	border-color: #F93B26;
+}
+
+input, a {
+	width: 60%;
+	display: block;
+	margin: 20px auto;
+	padding: 20px 40px;
+}
+
+
+a {
+	/*background: #2682F9;*/
+	background: #F93B26;
+	text-align: center;
+	color: #FFF;
+	font-weight: 700;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+a:hover {
+	background: #D13024;
+	transition: 0.3s ease;
+}

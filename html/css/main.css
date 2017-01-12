@@ -89,11 +89,11 @@ section.content {
 	overflow: auto;
 }
 
-section.content .other {
+section.content .other, section.content .mine {
 	margin: 15px;
 }
 
-section.content .other p {
+section.content .other p, section.content .mine p {
 	width: auto;
 	color: gray;
 	font-size: 20px;
@@ -106,21 +106,13 @@ section.content .other .post {
 	padding: 10px 25px;
 }
 
-section.content .other .post p {
+section.content .other .post p, section.content .mine .post p {
 	color: #FFF;
 	font-style: normal;
 	font-size: 35px;
 }
 
-section.content .mine {
-	margin: 15px;
-}
-
 section.content .mine p {
-	width: auto;
-	color: gray;
-	font-size: 20px;
-	font-style: italic;
 	text-align: right;
 }
 
@@ -132,9 +124,6 @@ section.content .mine .post {
 }
 
 section.content .mine .post p {
-	color: #FFF;
-	font-style: normal;
-	font-size: 35px;
 	text-align: left;
 }
 

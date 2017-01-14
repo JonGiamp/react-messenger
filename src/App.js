@@ -35,5 +35,10 @@ render((
     </Route>
   </Router>
 ), document.body)
+// NOTATION: Attention, c'est assez bizarre de faire un render ici, vous
+// devriez pouvoir exporter une unique classe qui rend le Router.
+// Car ici vous affichez deux fois le composant App (une fois par l'export, et une fois
+// dans le render manuel.
+// Aussi, il ne faut pas rendre directement dans document.body
 
 export default App;

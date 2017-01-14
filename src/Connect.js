@@ -22,6 +22,8 @@ class Connect extends Component {
     if(this.state.name)
       alert('A name was submitted: ' + this.state.name);
     // Maintenant je dois passer this.state.name en params à l'URL
+    // NOTATION: Au lieu de passer le this.state.name maintenant, tu peux simplement
+    // NOTATION: modifier dynamiquement le to avec {} par exemple
     event.preventDefault();
   }
 

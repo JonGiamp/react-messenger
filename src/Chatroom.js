@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+// NOTATION: Utilisez plutot une vraie classe plutot que React.createClass.
 export default React.createClass({
   render() {
     return(

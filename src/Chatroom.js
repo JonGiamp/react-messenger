@@ -39,9 +39,21 @@ class ChatBoxContainer extends Component {
 }
 
 class SendBoxText extends Component {
+  constructor(){
+    super();
+    this.state = {
+      value: ''
+    };
+  }
+
+  handleChange(event) {
+    //this.setState({ value: event.target.value });
+    //this.props.updateMessage is undefined, need to fix this
+    this.props.updateMessage(event.target.value);
+  }
   render() {
     return (
-      <textarea rows="3" placeholder="Ecrire le message..." ></textarea>
+      <textarea rows="3" placeholder="Ecrire le message..." value={this.state.value} onChange={this.handleChange}></textarea>
     );
   }
 }
@@ -58,7 +70,7 @@ class SendBoxContainer extends Component {
   render() {
     return (
       <section className="write-message">
-        <SendBoxText />
+        <SendBoxText onChange={this.props.updateMessage}/>
         <SendBoxSend />
       </section>
     );

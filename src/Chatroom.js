@@ -12,15 +12,12 @@ class TopBarContainer extends Component {
 }
 
 class ChatBoxContainer extends Component {
-  checkUsername(name) {
-    return (name === this.props.username) ? "mine" : "other";
-  }
+  checkUsername = (name) => (name === this.props.username) ? "mine" : "other";
 
   render() {
     return (
       <section className="content">
-        {/* Generate message list */}
-        {
+        { /* Generate message list */
           this.props.messages.map((message) => {
             return (
               <div className={this.checkUsername(message.name)} key={message.key}>
@@ -32,7 +29,6 @@ class ChatBoxContainer extends Component {
             );
           })
         }
-
       </section>
     );
   }
@@ -41,19 +37,16 @@ class ChatBoxContainer extends Component {
 class SendBoxText extends Component {
   constructor(){
     super();
-    this.state = {
-      value: ''
-    };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
-    //this.setState({ value: event.target.value });
-    //this.props.updateMessage is undefined, need to fix this
     this.props.updateMessage(event.target.value);
   }
+
   render() {
     return (
-      <textarea rows="3" placeholder="Ecrire le message..." value={this.state.value} onChange={this.handleChange}></textarea>
+      <textarea rows="3" placeholder="Ecrire le message..." value={this.props.message} onChange={this.handleChange}></textarea>
     );
   }
 }
@@ -61,7 +54,7 @@ class SendBoxText extends Component {
 class SendBoxSend extends Component {
   render() {
     return (
-      <button type="submit">Ok</button>
+      <button onClick={this.props.sendMessage} >Ok</button>
     );
   }
 }
@@ -70,8 +63,8 @@ class SendBoxContainer extends Component {
   render() {
     return (
       <section className="write-message">
-        <SendBoxText onChange={this.props.updateMessage}/>
-        <SendBoxSend />
+        <SendBoxText {...this.props} />
+        <SendBoxSend sendMessage={this.props.sendMessage}/>
       </section>
     );
   }
@@ -94,19 +87,25 @@ class Chatroom extends Component {
     };
   }
 
-  updateMessage(message) {
-    this.setState = {
-      message: message
-    };
-    console.log(this.state.message);
+  updateMessage = (text) => {
+    this.setState({
+      message: text
+    });
   }
+
+  sendMessage = () => {
+    if(this.state.message)
+      /**** SEND TO SERVER ****/
+    event.preventDefault();
+  }
+
 
   render() {
     return(
       <main className="page-chat">
-        <TopBarContainer username={this.props.params.username} />
+        <TopBarContainer username={this.props.params.username.replace(/-/g," ")} />
         <ChatBoxContainer messages={this.state.history} username={this.props.params.username}/>
-    		<SendBoxContainer onChange={this.updateMessage}/>
+    		<SendBoxContainer message={this.state.message} updateMessage={this.updateMessage} sendMessage={this.sendMessage}/>
     	</main>
     );
   }

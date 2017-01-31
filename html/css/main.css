@@ -71,6 +71,12 @@ header {
 	border: 1px solid #3F4D60;
 }
 
+header p {
+	float: left;
+	margin-left: 25px;
+	color: white;
+}
+
 header div {
 	float: right;
 	background: transparent;
@@ -87,7 +93,7 @@ header div img {
 }
 
 /*
-MENU 
+MENU
 */
 
 .sidenav {
@@ -133,7 +139,7 @@ MENU
 
 
 /*
-FIN MENU 
+FIN MENU
 */
 
 
@@ -209,6 +215,7 @@ section.write-message button{
 	color: #FFF;
 	cursor: pointer;
 	box-sizing: border-box;
+	border: none;
 }
 
 section.write-message button img{

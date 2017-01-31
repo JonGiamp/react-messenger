@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import users from './images/users.svg';
+import enveloppe from './images/envelope.svg';
 
 class TopBarContainer extends Component {
   render() {
     return(
       <header>
-        {this.props.username}
-        <div></div>
+        <p>{this.props.username}</p>
+        <div><img src={users} alt="users" onClick={this.props.openNav}/></div>
       </header>
     );
   }
@@ -21,10 +23,10 @@ class ChatBoxContainer extends Component {
           this.props.messages.map((message) => {
             return (
               <div className={this.checkUsername(message.name)} key={message.key}>
-                <p>{message.name} le {message.date}</p>
-                <div className="post">
-                  <p>{message.text}</p>
-                </div>
+                <p className="date">{message.name} le {message.date}</p>
+        				<div className="post">
+        					<p>{message.text}</p>
+        				</div>
               </div>
             );
           })
@@ -54,7 +56,24 @@ class SendBoxText extends Component {
 class SendBoxSend extends Component {
   render() {
     return (
-      <button onClick={this.props.sendMessage} >Ok</button>
+      <button onClick={this.props.sendMessage} ><img src={enveloppe} alt="Icone envelope"/></button>
+    );
+  }
+}
+
+class SideBarContainer extends Component {
+  render() {
+    return (
+      <div id="mySidenav" className="sidenav">
+    		<a href="javascript:void(0)" className="closebtn" onClick={this.props.closeNav}>&times;</a>
+          { /* Generate message list */
+            this.props.users.map((user) => {
+              return (
+                <li key={user.id}>{user.name}</li>
+              );
+            })
+          }
+    	</div>
     );
   }
 }
@@ -80,12 +99,18 @@ class Chatroom extends Component {
         {name: "Kevin", text: "Message de Kevin", date: "14 janvier 2017 à 18h00", key: 3},
         {name: "Jonathan", text: "Message de Jon 2", date: "14 janvier 2017 à 18h00", key: 4},
         {name: "Mario", text: "It's a me, Mario !", date: "14 janvier 2017 à 18h00", key: 5},
-        {name: "Booba", text: "OKLM 92i", date: "14 janvier 2017 à 18h00", key: 6}
+        {name: "Booba", text: "aijjjjjjjfiaij fjaj aofâo a^kfpâfapakpf ^pijeg igri gerihgrhgjrdghj gjdgidgierj gierjgerp j", date: "14 janvier 2017 à 18h00", key: 6},
+        {name: "Thomas", text: "aijjjjjjjfiaij fjaj aofâo a^kfpâfapakpf ^pijeg igri gerihgrhgjrdghj gjdgidgierj gierjgerp j", date: "14 janvier 2017 à 18h00", key: 7},
+        {name: "Booba", text: "qzd q", date: "14 janvier 2017 à 18h00", key: 8}
       ],
-      activeUsers: [/*"Jonathan", "Thomas"*/],
+      activeUsers: [
+        {name: "Jonathan", id: 0},
+        {name: "Thomas", id: 1},
+        {name: "Ludovic", id: 2},
+        {name: "Jordan", id: 3}
+      ],
       message: ""
     };
-    //this.socket = io();
   }
 
   updateMessage = (text) => {
@@ -100,10 +125,21 @@ class Chatroom extends Component {
     event.preventDefault();
   }
 
+  openNav = () => {
+    document.getElementById("mySidenav").style.width = "100%";
+    document.getElementById("main").style.overflow = "hidden";
+  }
+
+  closeNav = () => {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.overflow = "auto";
+  }
+
   render() {
     return(
       <main className="page-chat">
-        <TopBarContainer username={this.props.params.username.replace(/-/g," ")} />
+        <SideBarContainer closeNav={this.closeNav} users={this.state.activeUsers}/>
+        <TopBarContainer username={this.props.params.username.replace(/-/g," ")} openNav={this.openNav} />
         <ChatBoxContainer messages={this.state.history} username={this.props.params.username}/>
     		<SendBoxContainer message={this.state.message} updateMessage={this.updateMessage} sendMessage={this.sendMessage}/>
     	</main>

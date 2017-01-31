@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import catPic from './ico-cat.svg';
+import catPic from './images/ico-cat.svg';
 import slug from 'slug';
 
 class Connect extends Component {
@@ -36,7 +36,7 @@ class Connect extends Component {
           <input type="text" placeholder="Entrez votre pseudo..."
             value={this.state.value}
             onChange={this.handleChange} />
-          <button onClick={this.handleSubmit} className="btn">Connexion</button>
+          <a onClick={this.handleSubmit} className="btn">Connexion</a>
         </div>
       </main>
     );

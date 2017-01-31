@@ -4,15 +4,32 @@
 	<title>Page de chat</title>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/menu.css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 </head>
 <body>
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="#">Utilisateur 1</a>
+		<a href="#">Utilisateur 2</a>
+		<a href="#">Utilisateur 3</a>
+		<a href="#">Utilisateur 4</a>
+		<a href="#">Utilisateur 1</a>
+		<a href="#">Utilisateur 2</a>
+		<a href="#">Utilisateur 3</a>
+		<a href="#">Utilisateur 4</a>
+		<a href="#">Utilisateur 1</a>
+		<a href="#">Utilisateur 2</a>
+		<a href="#">Utilisateur 3</a>
+		<a href="#">Utilisateur 4</a>
+	</div>
 	<main class="page-chat">
 		<header>	
-			<div></div>
+			<!-- 			<div><img src="images/users.svg" alt="users" /></div> -->
+			<div style="font-size:30px;cursor:pointer" onclick="openNav()"><img src="images/users.svg" alt="users" /></div>
 		</header>
-		<section class="content">
+		<section  id='main' class="content">
 			<div class="other">
 				<p class="date">12 janvier 2017 à 15h32</p>
 				<div class="post">
@@ -67,5 +84,16 @@
 			<button type="submit"><img src="images/envelope.svg" alt="Icone envelope"</button>
 		</section>
 	</main>
+	<script>
+		function openNav() {
+			document.getElementById("mySidenav").style.width = "100%";
+			document.getElementById("main").style.overflow = "hidden";
+		}
+
+		function closeNav() {
+			document.getElementById("mySidenav").style.width = "0";
+			document.getElementById("main").style.overflow = "auto";
+		}
+	</script>
 </body>
 </html>

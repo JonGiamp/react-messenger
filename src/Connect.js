@@ -36,7 +36,7 @@ class Connect extends Component {
           <input type="text" placeholder="Entrez votre pseudo..."
             value={this.state.value}
             onChange={this.handleChange} />
-          <button onClick={this.handleSubmit}>Connexion</button>
+          <button onClick={this.handleSubmit} className="btn">Connexion</button>
         </div>
       </main>
     );

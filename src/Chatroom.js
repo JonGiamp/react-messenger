@@ -85,6 +85,7 @@ class Chatroom extends Component {
       activeUsers: [/*"Jonathan", "Thomas"*/],
       message: ""
     };
+    //this.socket = io();
   }
 
   updateMessage = (text) => {
@@ -98,7 +99,6 @@ class Chatroom extends Component {
       /**** SEND TO SERVER ****/
     event.preventDefault();
   }
-
 
   render() {
     return(

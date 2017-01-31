@@ -103,8 +103,8 @@ MENU
 	padding-top: 60px;
 }
 
-.sidenav a {
-	padding: 8px 8px 8px 32px;
+.sidenav a, .sidenav li {
+	padding: 8px;
 	text-decoration: none;
 	font-size: 25px;
 	color: #FFF;

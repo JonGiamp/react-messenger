@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import users from './images/users.svg';
 import enveloppe from './images/envelope.svg';
+import { SocketProvider } from 'socket.io-react';
+import io from 'socket.io-client';
+
+/********* TODO *********/
+// Mettre à jour la liste d'user pour tout les clients à chaque nouvelle connexion
+// Envoyer le message sur le serveur
+// Enregistrer le message sur le serveur
+// Mettre à jour l'historique des messages pour tout les clients
+
 
 class TopBarContainer extends Component {
   render() {
@@ -22,7 +31,7 @@ class ChatBoxContainer extends Component {
         { /* Generate message list */
           this.props.messages.map((message) => {
             return (
-              <div className={this.checkUsername(message.name)} key={message.key}>
+              <div className={this.checkUsername(message.name)} key={message.id}>
                 <p className="date">{message.name} le {message.date}</p>
         				<div className="post">
         					<p>{message.text}</p>
@@ -94,14 +103,14 @@ class Chatroom extends Component {
     super();
     this.state = {
       history: [
-        {name: "Jonathan", text: "Message de Jon", date: "13 janvier 2017 à 16h28", key: 1},
-        {name: "Thomas", text: "Message de Thomas", date: "14 janvier 2017 à 18h00", key: 2},
-        {name: "Kevin", text: "Message de Kevin", date: "14 janvier 2017 à 18h00", key: 3},
-        {name: "Jonathan", text: "Message de Jon 2", date: "14 janvier 2017 à 18h00", key: 4},
-        {name: "Mario", text: "It's a me, Mario !", date: "14 janvier 2017 à 18h00", key: 5},
-        {name: "Booba", text: "aijjjjjjjfiaij fjaj aofâo a^kfpâfapakpf ^pijeg igri gerihgrhgjrdghj gjdgidgierj gierjgerp j", date: "14 janvier 2017 à 18h00", key: 6},
-        {name: "Thomas", text: "aijjjjjjjfiaij fjaj aofâo a^kfpâfapakpf ^pijeg igri gerihgrhgjrdghj gjdgidgierj gierjgerp j", date: "14 janvier 2017 à 18h00", key: 7},
-        {name: "Booba", text: "qzd q", date: "14 janvier 2017 à 18h00", key: 8}
+        {name: "Jonathan", text: "Message de Jon", date: "13 janvier 2017 à 16h28", id: 1},
+        {name: "Thomas", text: "Message de Thomas", date: "14 janvier 2017 à 18h00", id: 2},
+        {name: "Kevin", text: "Message de Kevin", date: "14 janvier 2017 à 18h00", id: 3},
+        {name: "Jonathan", text: "Message de Jon 2", date: "14 janvier 2017 à 18h00", id: 4},
+        {name: "Mario", text: "It's a me, Mario !", date: "14 janvier 2017 à 18h00", id: 5},
+        {name: "Booba", text: "aijjjjjjjfiaij fjaj aofâo a^kfpâfapakpf ^pijeg igri gerihgrhgjrdghj gjdgidgierj gierjgerp j", date: "14 janvier 2017 à 18h00", id: 6},
+        {name: "Thomas", text: "aijjjjjjjfiaij fjaj aofâo a^kfpâfapakpf ^pijeg igri gerihgrhgjrdghj gjdgidgierj gierjgerp j", date: "14 janvier 2017 à 18h00", id: 7},
+        {name: "Booba", text: "qzd q", date: "14 janvier 2017 à 18h00", id: 8}
       ],
       activeUsers: [
         {name: "Jonathan", id: 0},
@@ -111,6 +120,13 @@ class Chatroom extends Component {
       ],
       message: ""
     };
+    this.socket = null;
+  }
+
+  componentDidMount = () => {
+    this.socket = io.connect("localhost:2222");
+    this.socket.on('message');
+    this.socket.emit('new user', { user: this.props.params.username });
   }
 
   updateMessage = (text) => {
@@ -121,7 +137,8 @@ class Chatroom extends Component {
 
   sendMessage = () => {
     if(this.state.message)
-      /**** SEND TO SERVER ****/
+      // ID et DATE généré coté serveur
+      // this.socket.emit('message', { name: this.props.params.username, text: this.state.message});
     event.preventDefault();
   }
 

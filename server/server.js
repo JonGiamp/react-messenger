@@ -5,23 +5,29 @@ var io = require('socket.io')(http);
 var port = 2222;
 
 var model = {
-  users: [],
-  history: []
+  users: [
+    // {name: "Jon", id: 1},
+    // {name: "Thomas", id: 2},
+  ],
+  history: [
+    // {name: "Jonathan", text: "Message de Jon", date: "13 janvier 2017 à 16h28", id: 1},
+    // {name: "Thomas", text: "Message de Thomas", date: "14 janvier 2017 à 18h00", id: 2}
+  ]
 };
 
 var count = {
-  idMessage: 0,
-  idMessage: 0
+  user: 0,
+  message: 0
 };
 
 app.get('/', function(req, res){
-  res.send('<h1>Welcon in the React-Messenger app :)</h1>');
+  res.send('<h1>Welcome in the React-Messenger app :)</h1>');
 });
 
 io.on('connection', function(socket){
 
   socket.on('new user', function(data) {
-    model.users.push( {name: data, id: count.idUsers++} );
+    model.users.push( {name: data, id: count.users++} );
   });
 
   socket.on('disconnect', function(){

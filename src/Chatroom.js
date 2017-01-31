@@ -22,6 +22,23 @@ class TopBarContainer extends Component {
   }
 }
 
+class SideBarContainer extends Component {
+  render() {
+    return (
+      <div id="mySidenav" className="sidenav">
+    		<a href="javascript:void(0)" className="closebtn" onClick={this.props.closeNav}>&times;</a>
+          { /* Generate user list */
+            this.props.users.map((user) => {
+              return (
+                <li key={user.id}>{user.name}</li>
+              );
+            })
+          }
+    	</div>
+    );
+  }
+}
+
 class ChatBoxContainer extends Component {
   checkUsername = (name) => (name === this.props.username) ? "mine" : "other";
 
@@ -40,6 +57,17 @@ class ChatBoxContainer extends Component {
             );
           })
         }
+      </section>
+    );
+  }
+}
+
+class SendBoxContainer extends Component {
+  render() {
+    return (
+      <section className="write-message">
+        <SendBoxText {...this.props} />
+        <SendBoxSend sendMessage={this.props.sendMessage}/>
       </section>
     );
   }
@@ -66,34 +94,6 @@ class SendBoxSend extends Component {
   render() {
     return (
       <button onClick={this.props.sendMessage} ><img src={enveloppe} alt="Icone envelope"/></button>
-    );
-  }
-}
-
-class SideBarContainer extends Component {
-  render() {
-    return (
-      <div id="mySidenav" className="sidenav">
-    		<a href="javascript:void(0)" className="closebtn" onClick={this.props.closeNav}>&times;</a>
-          { /* Generate message list */
-            this.props.users.map((user) => {
-              return (
-                <li key={user.id}>{user.name}</li>
-              );
-            })
-          }
-    	</div>
-    );
-  }
-}
-
-class SendBoxContainer extends Component {
-  render() {
-    return (
-      <section className="write-message">
-        <SendBoxText {...this.props} />
-        <SendBoxSend sendMessage={this.props.sendMessage}/>
-      </section>
     );
   }
 }

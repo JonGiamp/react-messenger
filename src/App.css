@@ -132,6 +132,9 @@ MENU
 	margin-left: 50px;
 }
 
+.apparent { width: 100%; }
+.hidden { width: 0; }
+
 @media screen and (max-height: 450px) {
 	.sidenav {padding-top: 15px;}
 	.sidenav a {font-size: 18px;}

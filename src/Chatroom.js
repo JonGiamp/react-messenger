@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import users from './images/users.svg';
 import enveloppe from './images/envelope.svg';
-import { SocketProvider } from 'socket.io-react';
+// import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 
 /********* TODO *********/
@@ -10,13 +10,13 @@ import io from 'socket.io-client';
 // Enregistrer le message sur le serveur
 // Mettre à jour l'historique des messages pour tout les clients
 
-
 class TopBarContainer extends Component {
+
   render() {
     return(
       <header>
         <p>{this.props.username}</p>
-        <div><img src={users} alt="users" onClick={this.props.openNav}/></div>
+        <div><img src={users} alt="users" onClick={this.props.toggleSideBar}/></div>
       </header>
     );
   }
@@ -25,8 +25,8 @@ class TopBarContainer extends Component {
 class SideBarContainer extends Component {
   render() {
     return (
-      <div id="mySidenav" className="sidenav">
-    		<a href="javascript:void(0)" className="closebtn" onClick={this.props.closeNav}>&times;</a>
+      <div id="mySidenav" className={`sidenav ${this.props.sideBarState}`}>
+    		<a className="closebtn" onClick={this.props.toggleSideBar}>&times;</a>
           { /* Generate user list */
             this.props.users.map((user) => {
               return (
@@ -91,9 +91,12 @@ class SendBoxText extends Component {
 }
 
 class SendBoxSend extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  }
   render() {
     return (
-      <button onClick={this.props.sendMessage} ><img src={enveloppe} alt="Icone envelope"/></button>
+      <button onClick={this.props.sendMessage}><img src={enveloppe} alt="Icone envelope"/></button>
     );
   }
 }
@@ -118,10 +121,18 @@ class Chatroom extends Component {
         {name: "Ludovic", id: 2},
         {name: "Jordan", id: 3}
       ],
-      message: ""
+      message: "",
+      userId: null,
+      sideBarState: "hidden"
     };
     this.socket = null;
   }
+
+  // componentWillMount = () => {
+  //   this.setState({
+  //     user.name: { name: this.props.params.username.replace(/-/g," ") }
+  //   });
+  // }
 
   componentDidMount = () => {
     this.socket = io.connect("localhost:2222");
@@ -137,27 +148,24 @@ class Chatroom extends Component {
 
   sendMessage = () => {
     if(this.state.message)
+      console.log(this.state.message);
       // ID et DATE généré coté serveur
       // this.socket.emit('message', { name: this.props.params.username, text: this.state.message});
     event.preventDefault();
   }
 
-  openNav = () => {
-    document.getElementById("mySidenav").style.width = "100%";
-    document.getElementById("main").style.overflow = "hidden";
-  }
-
-  closeNav = () => {
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.overflow = "auto";
+  toggleSideBar = () => {
+    this.setState({
+      sideBarState: this.state.sideBarState === "apparent" ? "hidden" : "apparent"
+    });
   }
 
   render() {
     return(
       <main className="page-chat">
-        <SideBarContainer closeNav={this.closeNav} users={this.state.activeUsers}/>
-        <TopBarContainer username={this.props.params.username.replace(/-/g," ")} openNav={this.openNav} />
-        <ChatBoxContainer messages={this.state.history} username={this.props.params.username}/>
+        <SideBarContainer users={this.state.activeUsers} toggleSideBar={this.toggleSideBar} sideBarState={this.state.sideBarState}/>
+        <TopBarContainer username={this.props.params.username.replace(/-/g," ")} toggleSideBar={this.toggleSideBar} />
+        <ChatBoxContainer messages={this.state.history} username={this.props.params.username.replace(/-/g," ")}/>
     		<SendBoxContainer message={this.state.message} updateMessage={this.updateMessage} sendMessage={this.sendMessage}/>
     	</main>
     );

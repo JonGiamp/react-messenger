@@ -27,7 +27,9 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
 
   socket.on('new user', function(data) {
-    model.users.push( {name: data, id: count.users++} );
+    model.users.push( {name: data.user, id: count.user++} );
+    io.emit('update users', model.users);
+    console.log(model.users);
   });
 
   socket.on('disconnect', function(){

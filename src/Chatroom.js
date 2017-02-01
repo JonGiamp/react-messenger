@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import users from './images/users.svg';
 import enveloppe from './images/envelope.svg';
 // import { SocketProvider } from 'socket.io-react';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
+import { socketConnect } from 'socket.io-react';
 
 /********* TODO *********/
-// Mettre à jour la liste d'user pour tout les clients à chaque nouvelle connexion
+// Faire en sorte que lorsqu'un user se connecte, on lui envoi le tableau d'user puis le tableau history en initialisation
+// Les autres users recoivent juste une MAJ
 // Envoyer le message sur le serveur
 // Enregistrer le message sur le serveur
 // Mettre à jour l'historique des messages pour tout les clients
@@ -125,19 +127,18 @@ class Chatroom extends Component {
       userId: null,
       sideBarState: "hidden"
     };
-    this.socket = null;
   }
 
-  // componentWillMount = () => {
-  //   this.setState({
-  //     user.name: { name: this.props.params.username.replace(/-/g," ") }
-  //   });
-  // }
-
   componentDidMount = () => {
-    this.socket = io.connect("localhost:2222");
-    this.socket.on('message');
-    this.socket.emit('new user', { user: this.props.params.username });
+    this.props.socket.on();
+    this.props.socket.emit('new user', { user: this.props.params.username });
+    this.props.socket.on('update users', (data) =>  this._updateUsers(data) );
+  }
+
+  _updateUsers = (data) => {
+    this.setState({
+      activeUsers: data
+    });
   }
 
   updateMessage = (text) => {
@@ -150,7 +151,7 @@ class Chatroom extends Component {
     if(this.state.message)
       console.log(this.state.message);
       // ID et DATE généré coté serveur
-      // this.socket.emit('message', { name: this.props.params.username, text: this.state.message});
+      // this.props.socket.emit('new message', { name: this.props.params.username, text: this.state.message});
     event.preventDefault();
   }
 
@@ -172,4 +173,4 @@ class Chatroom extends Component {
   }
 }
 
-export default Chatroom;
+export default socketConnect(Chatroom);

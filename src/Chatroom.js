@@ -6,11 +6,11 @@ import enveloppe from './images/envelope.svg';
 import { socketConnect } from 'socket.io-react';
 
 /********* TODO *********/
-// Faire en sorte que lorsqu'un user se connecte, on lui envoi le tableau d'user puis le tableau history en initialisation
-// Les autres users recoivent juste une MAJ
 // Envoyer le message sur le serveur
 // Enregistrer le message sur le serveur
 // Mettre à jour l'historique des messages pour tout les clients
+// Gérer le disconect
+// Basé l'UI des messages sur l'userId
 
 class TopBarContainer extends Component {
 
@@ -118,10 +118,10 @@ class Chatroom extends Component {
         {name: "Booba", text: "qzd q", date: "14 janvier 2017 à 18h00", id: 8}
       ],
       activeUsers: [
-        {name: "Jonathan", id: 0},
-        {name: "Thomas", id: 1},
-        {name: "Ludovic", id: 2},
-        {name: "Jordan", id: 3}
+        // {name: "Jonathan", id: 0},
+        // {name: "Thomas", id: 1},
+        // {name: "Ludovic", id: 2},
+        // {name: "Jordan", id: 3}
       ],
       message: "",
       userId: null,
@@ -132,12 +132,29 @@ class Chatroom extends Component {
   componentDidMount = () => {
     this.props.socket.on();
     this.props.socket.emit('new user', { user: this.props.params.username });
+    // TEST SOLO
+    // this.props.socket.on('message', (data) =>  console.log(data));
+    this.props.socket.on('initialize data', (data) =>  this._initializeData(data) );
     this.props.socket.on('update users', (data) =>  this._updateUsers(data) );
+  }
+
+  _initializeData = (data) => {
+    this.setState({
+      history: data.history,
+      activeUsers: data.activeUsers,
+      userId: data.userId
+    });
+  }
+
+  _updateHistory = (data) => {
+    this.setState({
+      history: this.state.history.concat(data.newMessage)
+    })
   }
 
   _updateUsers = (data) => {
     this.setState({
-      activeUsers: data
+      activeUsers: this.state.activeUsers.concat(data.newUser)
     });
   }
 

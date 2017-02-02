@@ -5,15 +5,19 @@ import { socketConnect } from 'socket.io-react';
 import monthName from './monthName.js'
 
 /********* TODO *********/
-// Gérer le disconect
-// Implanter shouldComponentUpdate, propstype etc..
-// CLean les node_modules
-// Rajouter des messages systèmes ?
+// Unmount Chatroom component pour reset state
+// Implanter shouldComponentUpdate, finir propstype avec l'object array
 
 class TopBarContainer extends Component {
+  propTypes: {
+    username: React.PropTypes.string.isRequired,
+    toggleSideBar: React.PropTypes.func.isRequired,
+    disconnectUser: React.PropTypes.func.isRequired
+  }
   render() {
     return(
       <header>
+        <p onClick={this.props.disconnectUser}>X</p>
         <p>{this.props.username}</p>
         <div><img src={users} alt="users" onClick={this.props.toggleSideBar}/></div>
       </header>
@@ -22,6 +26,11 @@ class TopBarContainer extends Component {
 }
 
 class SideBarContainer extends Component {
+  propTypes: {
+    sideBarState: React.PropTypes.string.isRequired,
+    toggleSideBar: React.PropTypes.func.isRequired,
+    // users: React.PropTypes.arrayOf(React.PropTypes.shape({name: React.PropTypes.string, id: React.PropTypes.number }))
+  }
   render() {
     return (
       <div id="mySidenav" className={`sidenav ${this.props.sideBarState}`}>
@@ -39,6 +48,17 @@ class SideBarContainer extends Component {
 }
 
 class ChatBoxContainer extends Component {
+  propTypes: {
+    userId: React.PropTypes.number.isRequired,
+    // messages: React.PropTypes.arrayOf(React.PropTypes.shape({
+    //   userId: React.PropTypes.number,
+    //   id: React.PropTypes.number,
+    //   name: React.PropTypes.string,
+    //   date: React.PropTypes.string,
+    //   text: React.PropTypes.string,
+    // }))
+  }
+
   checkUserId = (userId) => (userId === this.props.userId) ? "mine" : "other";
 
   render() {
@@ -62,6 +82,12 @@ class ChatBoxContainer extends Component {
 }
 
 class SendBoxContainer extends Component {
+  propTypes: {
+    message: React.PropTypes.string.isRequired,
+    updateMessage: React.PropTypes.func.isRequired,
+    sendMessage: React.PropTypes.func.isRequired
+  }
+
   render() {
     return (
       <section className="write-message">
@@ -73,6 +99,11 @@ class SendBoxContainer extends Component {
 }
 
 class SendBoxText extends Component {
+  propTypes: {
+    message: React.PropTypes.string.isRequired,
+    updateMessage: React.PropTypes.func.isRequired
+  }
+
   constructor(){
     super();
     this.handleChange = this.handleChange.bind(this);
@@ -90,6 +121,9 @@ class SendBoxText extends Component {
 }
 
 class SendBoxSend extends Component {
+  propTypes: {
+    sendMessage: React.PropTypes.func.isRequired
+  }
   shouldComponentUpdate(nextProps, nextState) {
     return false;
   }
@@ -104,8 +138,8 @@ class Chatroom extends Component {
   constructor() {
     super();
     this.state = {
-      history: [ /* {name: "Jonathan", text: "Message de Jon", date: "13 janvier 2017 à 16h28", id: 1} */ ],
-      activeUsers: [ /* {name: "Jonathan", id: 0} */ ],
+      history: [ /* {name: "Jonathan", text: "Message de Jon", date: "13 janvier 2017 à 16h28", id: 1, userId: 3} */ ],
+      activeUsers: [ /* {name: "Jonathan", userId: 0} */ ],
       message: "",
       userId: null,
       sideBarState: "hidden"
@@ -114,10 +148,17 @@ class Chatroom extends Component {
 
   componentDidMount = () => {
     this.props.socket.on();
-    this.props.socket.emit('new user', { user: this.props.params.username });
+    this.props.socket.emit('new user', { user: this.formatName(this.props.params.username) });
     this.props.socket.on('initialize data', (data) =>  this._initializeData(data) );
     this.props.socket.on('update users', (data) =>  this._updateUsers(data) );
     this.props.socket.on('update history', (data) =>  this._updateHistory(data) );
+    this.props.socket.on('slice user', (data) =>  this._sliceUser(data) );
+  }
+
+  _sliceUser = (index) => {
+    this.setState({
+      activeUsers: this.state.activeUsers.slice(0, index).concat(this.state.activeUsers.slice(index + 1))
+    });
   }
 
   _initializeData = (data) => {
@@ -140,6 +181,8 @@ class Chatroom extends Component {
     });
   }
 
+  formatName = (name) => name.replace(/-/g," ");
+
   updateMessage = (text) => {
     this.setState({
       message: text
@@ -157,14 +200,20 @@ class Chatroom extends Component {
     const hours = d.getHours();
     const minutes = d.getMinutes();
     this.props.socket.emit('new message', {
-      user: this.props.params.username,
+      user: this.formatName(this.props.params.username),
       text: this.state.message,
-      date: `${day} ${month} ${year} à ${hours}h${minutes}`
+      date: `${day} ${month} ${year} à ${hours}h${minutes}`,
+      userId: this.state.userId
     });
-    this.setState({
-      message: ''
-    });
+    this.setState({ message: '' });
     event.preventDefault();
+  }
+
+  disconnectUser = () => {
+    console.log(this.state.activeUsers);
+    console.log(this.state.userId);
+    this.props.socket.emit('disconnect user', this.state.userId);
+    this.props.router.push('/');
   }
 
   toggleSideBar = () => {
@@ -177,7 +226,7 @@ class Chatroom extends Component {
     return(
       <main className="page-chat">
         <SideBarContainer users={this.state.activeUsers} toggleSideBar={this.toggleSideBar} sideBarState={this.state.sideBarState}/>
-        <TopBarContainer username={this.props.params.username.replace(/-/g," ")} toggleSideBar={this.toggleSideBar} />
+        <TopBarContainer username={this.formatName(this.props.params.username)} toggleSideBar={this.toggleSideBar} disconnectUser={this.disconnectUser}/>
         <ChatBoxContainer messages={this.state.history} userId={this.state.userId}/>
     		<SendBoxContainer message={this.state.message} updateMessage={this.updateMessage} sendMessage={this.sendMessage}/>
     	</main>

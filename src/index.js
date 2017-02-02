@@ -8,7 +8,7 @@ import { SocketProvider } from 'socket.io-react';
 import './App.css';
 import io from 'socket.io-client';
 
-const socket = io.connect("localhost:2222");
+const socket = io.connect("localhost:2222", {'forceNew':true });
 
 ReactDOM.render(
   <SocketProvider socket={socket}>

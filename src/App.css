@@ -73,8 +73,12 @@ header {
 
 header p {
 	float: left;
+	margin: 0;
 	margin-left: 25px;
 	color: white;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 header div {
@@ -84,6 +88,26 @@ header div {
 	top: 50%;
 	right: 30px;
 	transform: translate(50%, -50%);
+}
+
+header > img {
+	width: 17px;
+	float: left;
+	position: relative;
+	top: 50%;
+	left: 4%;
+	transform: translateY(-50%);
+}
+
+header span {
+	float: right;
+	position: relative;
+	top: 50%;
+	transform: translate(-150%, -50%);
+	background: #FFF;
+	border-radius: 50%;
+	padding: 5px 8px;
+	font-size: 9px;
 }
 
 header div img {
@@ -122,23 +146,20 @@ MENU
 
 /*.sidenav a:hover, .offcanvas a:focus{
 	color: #f1f1f1;
-}*/
+	}*/
 
-.sidenav .closebtn {
-	position: absolute;
-	top: -5px;
-	right: 15px;
-	font-size: 36px;
-	margin-left: 50px;
-}
+	.sidenav .closebtn {
+		position: absolute;
+		top: -5px;
+		right: 15px;
+		font-size: 36px;
+		margin-left: 50px;
+	}
 
-.apparent { width: 100%; }
-.hidden { width: 0; }
-
-@media screen and (max-height: 450px) {
-	.sidenav {padding-top: 15px;}
-	.sidenav a {font-size: 18px;}
-}
+	@media screen and (max-height: 450px) {
+		.sidenav {padding-top: 15px;}
+		.sidenav a {font-size: 18px;}
+	}
 
 
 /*
@@ -150,7 +171,6 @@ FIN MENU
 section.content {
 	max-height: 80%;
 	width: 100%;
-	border-bottom: 1px solid #3F4D60;
 	overflow: auto;
 }
 
@@ -194,6 +214,9 @@ section.content .mine .post p {
 section.write-message {
 	height: 13%;
 	width: 100%;
+	position: absolute;
+	bottom: 0;
+	border-top: 1px solid #3F4D60;
 }
 
 section.write-message textarea {
@@ -205,6 +228,7 @@ section.write-message textarea {
 	padding: 20px;
 	border-radius: 0;
 	border: none;
+	resize: none;
 }
 
 section.write-message button{
@@ -224,3 +248,22 @@ section.write-message button{
 section.write-message button img{
 	width: 40%;
 }
+
+@media (min-width: 992px) {
+	body {
+		width: 500px;
+		margin: auto;
+		background: #ededed;
+	}
+
+	section.write-message {
+		position: relative;
+	}
+
+	section.content {
+		min-height: 80%;
+	}
+}
+
+.apparent { width: 100%; }
+.hidden { width: 0; }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import users from './images/users.svg';
+import arrow from './images/arrow-left.svg';
 import enveloppe from './images/envelope.svg';
 import { socketConnect } from 'socket.io-react';
 import monthName from './monthName.js'
@@ -17,9 +18,10 @@ class TopBarContainer extends Component {
   render() {
     return(
       <header>
-        <p onClick={this.props.disconnectUser}>X</p>
+        <img src={arrow} alt="arrow left back" onClick={this.props.disconnectUser}/>
         <p>{this.props.username}</p>
         <div><img src={users} alt="users" onClick={this.props.toggleSideBar}/></div>
+        <span className="badge">{this.props.usersCount}</span>
       </header>
     );
   }
@@ -28,8 +30,11 @@ class TopBarContainer extends Component {
 class SideBarContainer extends Component {
   propTypes: {
     sideBarState: React.PropTypes.string.isRequired,
-    toggleSideBar: React.PropTypes.func.isRequired,
-    // users: React.PropTypes.arrayOf(React.PropTypes.shape({name: React.PropTypes.string, id: React.PropTypes.number }))
+    toggleSideBar: React.PropTypes.func.isRequired
+    // users: React.PropTypes.arrayOf(React.PropTypes.shape({
+    //   name: React.PropTypes.string,
+    //   id: React.PropTypes.number
+    // }))
   }
   render() {
     return (
@@ -49,13 +54,13 @@ class SideBarContainer extends Component {
 
 class ChatBoxContainer extends Component {
   propTypes: {
-    userId: React.PropTypes.number.isRequired,
+    userId: React.PropTypes.number.isRequired
     // messages: React.PropTypes.arrayOf(React.PropTypes.shape({
     //   userId: React.PropTypes.number,
     //   id: React.PropTypes.number,
     //   name: React.PropTypes.string,
     //   date: React.PropTypes.string,
-    //   text: React.PropTypes.string,
+    //   text: React.PropTypes.string
     // }))
   }
 
@@ -68,7 +73,7 @@ class ChatBoxContainer extends Component {
           this.props.messages.map((message) => {
             return (
               <div className={this.checkUserId(message.userId)} key={message.id}>
-                <p className="date">{message.name} le {message.date}</p>
+                <p className="date">{message.user} le {message.date}</p>
         				<div className="post">
         					<p>{message.text}</p>
         				</div>
@@ -210,9 +215,7 @@ class Chatroom extends Component {
   }
 
   disconnectUser = () => {
-    console.log(this.state.activeUsers);
-    console.log(this.state.userId);
-    this.props.socket.emit('disconnect user', this.state.userId);
+    this.props.socket.emit('disconnect user');
     this.props.router.push('/');
   }
 
@@ -225,10 +228,26 @@ class Chatroom extends Component {
   render() {
     return(
       <main className="page-chat">
-        <SideBarContainer users={this.state.activeUsers} toggleSideBar={this.toggleSideBar} sideBarState={this.state.sideBarState}/>
-        <TopBarContainer username={this.formatName(this.props.params.username)} toggleSideBar={this.toggleSideBar} disconnectUser={this.disconnectUser}/>
-        <ChatBoxContainer messages={this.state.history} userId={this.state.userId}/>
-    		<SendBoxContainer message={this.state.message} updateMessage={this.updateMessage} sendMessage={this.sendMessage}/>
+        <SideBarContainer
+          users={this.state.activeUsers}
+          toggleSideBar={this.toggleSideBar}
+          sideBarState={this.state.sideBarState}
+        />
+        <TopBarContainer
+          username={this.formatName(this.props.params.username)}
+          toggleSideBar={this.toggleSideBar}
+          disconnectUser={this.disconnectUser}
+          usersCount={this.state.activeUsers.length}
+        />
+        <ChatBoxContainer
+          messages={this.state.history}
+          userId={this.state.userId
+          }/>
+    		<SendBoxContainer
+          message={this.state.message}
+          updateMessage={this.updateMessage}
+          sendMessage={this.sendMessage}
+        />
     	</main>
     );
   }

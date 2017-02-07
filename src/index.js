@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import App from './App.js';
 import Connect from './Connect.js';
 import Chatroom from './Chatroom.js';
@@ -8,11 +8,11 @@ import { SocketProvider } from 'socket.io-react';
 import './App.css';
 import io from 'socket.io-client';
 
-const socket = io.connect("https://react-messenger-jongiamp.c9users.io:2222/", {'forceNew':true });
+const socket = io.connect("localhost:2222/", {'forceNew':true });
 
 ReactDOM.render(
   <SocketProvider socket={socket}>
-    <Router history={hashHistory}>
+    <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={Connect} />
         <Route path="/chatroom/:username" component={Chatroom} />

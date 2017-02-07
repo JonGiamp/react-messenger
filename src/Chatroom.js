@@ -148,7 +148,7 @@ class Chatroom extends Component {
   }
 
   componentDidMount = () => {
-    this.props.socket.on();
+    // this.props.socket.on();
     this.props.socket.emit('new user', { user: this.formatName(this.props.params.username) });
     this.props.socket.on('initialize data', (data) =>  this._initializeData(data) );
     this.props.socket.on('update users', (data) =>  this._updateUsers(data) );

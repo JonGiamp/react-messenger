@@ -73,8 +73,12 @@ header {
 
 header p {
 	float: left;
+	margin: 0;
 	margin-left: 25px;
 	color: white;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 header div {
@@ -89,7 +93,10 @@ header div {
 header > img {
 	width: 17px;
 	float: left;
-	transform: translate(80%, 100%);
+	position: relative;
+	top: 50%;
+	left: 4%;
+	transform: translateY(-50%);
 }
 
 header span {
@@ -240,4 +247,23 @@ section.write-message button{
 
 section.write-message button img{
 	width: 40%;
+}
+
+
+
+
+@media (min-width: 992px) {
+	body {
+		width: 500px;
+		margin: auto;
+		background: #ededed;
+	}
+
+	section.write-message {
+		position: relative;
+	}
+
+	section.content {
+		min-height: 80%;
+	}
 }

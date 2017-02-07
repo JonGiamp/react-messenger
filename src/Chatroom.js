@@ -3,11 +3,7 @@ import users from './images/users.svg';
 import arrow from './images/arrow-left.svg';
 import enveloppe from './images/envelope.svg';
 import { socketConnect } from 'socket.io-react';
-import monthName from './monthName.js'
-
-/********* TODO *********/
-// Unmount Chatroom component pour reset state
-// Implanter shouldComponentUpdate, finir propstype avec l'object array
+import monthName from './monthName.js';
 
 class TopBarContainer extends Component {
   propTypes: {

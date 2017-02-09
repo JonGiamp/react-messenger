@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { socketConnect } from 'socket.io-react';
 import users from './images/users.svg';
 import arrow from './images/arrow-left.svg';
 import enveloppe from './images/envelope.svg';
 
-/**** TODO ***/
-// understand why React.PropTypes.arrayOf(React.PropTypes.shape doesn't work
+/**** TO FIX ****/
+// PropTypes.oneOf and PropTypes.arrayOf return error
 
 class TopBarContainer extends Component {
   propTypes: {
@@ -31,12 +32,12 @@ class TopBarContainer extends Component {
 
 class SideBarContainer extends Component {
   propTypes: {
-    sideBarState: React.PropTypes.string.isRequired,
-    toggleSideBar: React.PropTypes.func.isRequired,
-    users: React.PropTypes.arrayOf(React.PropTypes.shape({
-      name: React.PropTypes.string,
-      id: React.PropTypes.number
-    }))
+    // sideBarState: React.PropTypes.oneOf(['apparent', 'hidden']).isRequired,
+    toggleSideBar: React.PropTypes.func.isRequired
+    // users: React.PropTypes.arrayOf(React.PropTypes.shape({
+    //   name: React.PropTypes.string,
+    //   id: React.PropTypes.number
+    // })).isRequired
   }
 
   shouldComponentUpdate = (nextProps) => {
@@ -74,6 +75,11 @@ class ChatBoxContainer extends Component {
   }
 
   shouldComponentUpdate = (nextProps) => nextProps.messages !== this.props.messages;
+
+  componentDidUpdate = () => {
+    let node = ReactDOM.findDOMNode(this);
+    node.scrollTop = node.scrollHeight;
+  }
 
   checkUserId = (userId) => (userId === this.props.userId) ? "mine" : "other";
 

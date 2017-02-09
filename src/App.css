@@ -191,6 +191,7 @@ section.content .other .post, section.content .mine .post{
 	background: #32C0C6;
 	padding: 1px 15px;
 	border-radius: 20px;
+	overflow: hidden;
 }
 
 section.content .other .post p, section.content .mine .post p {
@@ -210,6 +211,8 @@ section.content .mine .post {
 section.content .mine .post p {
 	text-align: left;
 }
+
+.post > p { word-wrap: break-word; }
 
 section.write-message {
 	height: 13%;

@@ -5,15 +5,12 @@ import users from './images/users.svg';
 import arrow from './images/arrow-left.svg';
 import enveloppe from './images/envelope.svg';
 
-/**** TO FIX ****/
-// PropTypes.oneOf and PropTypes.arrayOf return error
-
 class TopBarContainer extends Component {
-  propTypes: {
+  static propTypes = {
     username: React.PropTypes.string.isRequired,
     toggleSideBar: React.PropTypes.func.isRequired,
     disconnectUser: React.PropTypes.func.isRequired,
-    usersCount: React.PopTypes.number.isRequired
+    usersCount: React.PropTypes.number.isRequired
   }
 
   shouldComponentUpdate = (nextProps) => nextProps.usersCount !== this.props.usersCount;
@@ -31,13 +28,13 @@ class TopBarContainer extends Component {
 }
 
 class SideBarContainer extends Component {
-  propTypes: {
-    // sideBarState: React.PropTypes.oneOf(['apparent', 'hidden']).isRequired,
-    toggleSideBar: React.PropTypes.func.isRequired
-    // users: React.PropTypes.arrayOf(React.PropTypes.shape({
-    //   name: React.PropTypes.string,
-    //   id: React.PropTypes.number
-    // })).isRequired
+  static propTypes = {
+    sideBarState: React.PropTypes.oneOf(['apparent', 'hidden']).isRequired,
+    toggleSideBar: React.PropTypes.func.isRequired,
+    users: React.PropTypes.arrayOf(React.PropTypes.shape({
+      name: React.PropTypes.string,
+      id: React.PropTypes.number
+    })).isRequired
   }
 
   shouldComponentUpdate = (nextProps) => {
@@ -63,15 +60,15 @@ class SideBarContainer extends Component {
 }
 
 class ChatBoxContainer extends Component {
-  propTypes: {
-    userId: React.PropTypes.number.isRequired
-    // messages: React.PropTypes.arrayOf(React.PropTypes.shape({
-    //   userId: React.PropTypes.number,
-    //   id: React.PropTypes.number,
-    //   name: React.PropTypes.string,
-    //   date: React.PropTypes.string,
-    //   text: React.PropTypes.string
-    // }))
+  static propTypes = {
+    userId: React.PropTypes.number,
+    messages: React.PropTypes.arrayOf(React.PropTypes.shape({
+      userId: React.PropTypes.number,
+      id: React.PropTypes.number,
+      name: React.PropTypes.string,
+      date: React.PropTypes.string,
+      text: React.PropTypes.string
+    }))
   }
 
   shouldComponentUpdate = (nextProps) => nextProps.messages !== this.props.messages;
@@ -104,7 +101,7 @@ class ChatBoxContainer extends Component {
 }
 
 class SendBoxContainer extends Component {
-  propTypes: {
+  static propTypes = {
     message: React.PropTypes.string.isRequired,
     updateMessage: React.PropTypes.func.isRequired,
     sendMessage: React.PropTypes.func.isRequired
@@ -123,7 +120,7 @@ class SendBoxContainer extends Component {
 }
 
 class SendBoxText extends Component {
-  propTypes: {
+  static propTypes = {
     message: React.PropTypes.string.isRequired,
     updateMessage: React.PropTypes.func.isRequired
   }
@@ -140,7 +137,7 @@ class SendBoxText extends Component {
 }
 
 class SendBoxSend extends Component {
-  propTypes: {
+  static propTypes = {
     sendMessage: React.PropTypes.func.isRequired
   }
 

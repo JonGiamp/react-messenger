@@ -9,10 +9,12 @@ var model = {
     // {name: "SERVEUR", userId: 2, socketId: "qzdq84d5d1q2s" }
   ],
   history: [
-    /*{name: "Jonathan", text: "Message de Jon", date: "13 janvier 2017 à 16h28", id: '1', userId: 4},
-    {name: "Thomas", text: "Message de Thomas", date: "14 janvier 2017 à 18h00", id: '2', userId: '6'}*/
+    // {name: "Jonathan", text: "Message de Jon", date: "13 janvier 2017 à 16h28", id: '1', userId: 4},
+    // {name: "Thomas", text: "Message de Thomas", date: "14 janvier 2017 à 18h00", id: '2', userId: 6}
   ]
 };
+
+var monthName = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
 var messageId = 0;
 var userId = 0;
@@ -29,6 +31,15 @@ function disconnectUser(socketId) {
   var index = findUserIndex(socketId);
   model.users = model.users.slice(0, index).concat(model.users.slice(index + 1));
   return index;
+}
+
+function stringifyDate(date) {
+  var day = date.getDate();
+  var month = monthName[date.getMonth()];
+  var year = date.getFullYear();
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  return day+" "+month+" "+year+" à "+hours+"h"+minutes;
 }
 
 io.on('connection', function(socket){
@@ -53,11 +64,12 @@ io.on('connection', function(socket){
 
   socket.on('new message', function(data) {
     messageId++;
+    var date = stringifyDate(new Date());
 
     model.history.push({
       user: data.user,
       text: data.text,
-      date: data.date,
+      date: date,
       id: messageId,
       userId: data.userId
     });
@@ -66,7 +78,7 @@ io.on('connection', function(socket){
       newMessage: {
         user: data.user,
         text: data.text,
-        date: data.date,
+        date: date,
         id: messageId,
         userId: data.userId
       }

@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
+import { socketConnect } from 'socket.io-react';
 import users from './images/users.svg';
 import arrow from './images/arrow-left.svg';
 import enveloppe from './images/envelope.svg';
-import { socketConnect } from 'socket.io-react';
-import monthName from './monthName.js';
+
+/**** TODO ***/
+// understand why React.PropTypes.arrayOf(React.PropTypes.shape doesn't work
 
 class TopBarContainer extends Component {
   propTypes: {
     username: React.PropTypes.string.isRequired,
     toggleSideBar: React.PropTypes.func.isRequired,
-    disconnectUser: React.PropTypes.func.isRequired
+    disconnectUser: React.PropTypes.func.isRequired,
+    usersCount: React.PopTypes.number.isRequired
   }
+
+  shouldComponentUpdate = (nextProps) => nextProps.usersCount !== this.props.usersCount;
+
   render() {
     return(
       <header>
@@ -26,12 +32,19 @@ class TopBarContainer extends Component {
 class SideBarContainer extends Component {
   propTypes: {
     sideBarState: React.PropTypes.string.isRequired,
-    toggleSideBar: React.PropTypes.func.isRequired
-    // users: React.PropTypes.arrayOf(React.PropTypes.shape({
-    //   name: React.PropTypes.string,
-    //   id: React.PropTypes.number
-    // }))
+    toggleSideBar: React.PropTypes.func.isRequired,
+    users: React.PropTypes.arrayOf(React.PropTypes.shape({
+      name: React.PropTypes.string,
+      id: React.PropTypes.number
+    }))
   }
+
+  shouldComponentUpdate = (nextProps) => {
+    if(nextProps.sideBarState !== this.props.sideBarState || nextProps.users !== this.props.users)
+      return true;
+    return false;
+  }
+
   render() {
     return (
       <div id="mySidenav" className={`sidenav ${this.props.sideBarState}`}>
@@ -59,6 +72,8 @@ class ChatBoxContainer extends Component {
     //   text: React.PropTypes.string
     // }))
   }
+
+  shouldComponentUpdate = (nextProps) => nextProps.messages !== this.props.messages;
 
   checkUserId = (userId) => (userId === this.props.userId) ? "mine" : "other";
 
@@ -89,10 +104,12 @@ class SendBoxContainer extends Component {
     sendMessage: React.PropTypes.func.isRequired
   }
 
+  shouldComponentUpdate = (nextProps) => nextProps.message !== this.props.message;
+
   render() {
     return (
       <section className="write-message">
-        <SendBoxText {...this.props} />
+        <SendBoxText message={this.props.message} updateMessage={this.props.updateMessage} />
         <SendBoxSend sendMessage={this.props.sendMessage}/>
       </section>
     );
@@ -105,14 +122,9 @@ class SendBoxText extends Component {
     updateMessage: React.PropTypes.func.isRequired
   }
 
-  constructor(){
-    super();
-    this.handleChange = this.handleChange.bind(this);
-  }
+  shouldComponentUpdate = (nextProps) => nextProps.message !== this.props.message;
 
-  handleChange(event) {
-    this.props.updateMessage(event.target.value);
-  }
+  handleChange = (event) => this.props.updateMessage(event.target.value);
 
   render() {
     return (
@@ -125,9 +137,9 @@ class SendBoxSend extends Component {
   propTypes: {
     sendMessage: React.PropTypes.func.isRequired
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    return false;
-  }
+
+  shouldComponentUpdate = (nextProps) => false;
+
   render() {
     return (
       <button onClick={this.props.sendMessage}><img src={enveloppe} alt="Icone envelope"/></button>
@@ -148,7 +160,6 @@ class Chatroom extends Component {
   }
 
   componentDidMount = () => {
-    // this.props.socket.on();
     this.props.socket.emit('new user', { user: this.formatName(this.props.params.username) });
     this.props.socket.on('initialize data', (data) =>  this._initializeData(data) );
     this.props.socket.on('update users', (data) =>  this._updateUsers(data) );
@@ -194,16 +205,9 @@ class Chatroom extends Component {
     if(!this.state.message)
       return;
 
-    const d = new Date();
-    const day = d.getDate();
-    const month = monthName[d.getMonth()];
-    const year = d.getFullYear();
-    const hours = d.getHours();
-    const minutes = d.getMinutes();
     this.props.socket.emit('new message', {
       user: this.formatName(this.props.params.username),
       text: this.state.message,
-      date: `${day} ${month} ${year} à ${hours}h${minutes}`,
       userId: this.state.userId
     });
     this.setState({ message: '' });

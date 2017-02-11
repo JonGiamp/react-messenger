@@ -17,8 +17,8 @@ class TopBarContainer extends Component {
 
   render() {
     return(
-      <header>
-        <img src={arrow} alt="arrow left back" onClick={this.props.disconnectUser}/>
+		<header>
+		<img src={arrow} alt="arrow left back" onClick={this.props.disconnectUser}/>
         <p>{this.props.username}</p>
         <div><img src={users} alt="users" onClick={this.props.toggleSideBar}/></div>
         <span className="badge">{this.props.usersCount}</span>
@@ -28,6 +28,7 @@ class TopBarContainer extends Component {
 }
 
 class SideBarContainer extends Component {
+// NOTATION: Super pour les proptypes
   static propTypes = {
     sideBarState: React.PropTypes.oneOf(['apparent', 'hidden']).isRequired,
     toggleSideBar: React.PropTypes.func.isRequired,
@@ -37,13 +38,22 @@ class SideBarContainer extends Component {
     })).isRequired
   }
 
+// NOTATION: Pour info, dans la "vraie vie", on utiliserait pas autant shouldComponentUpdate,
+// c'était plus pour que tu ailles comprendre ce que c'est. Voila un article assez intéressant sur le sujet :
+// http://jamesknelson.com/should-i-use-shouldcomponentupdate/
   shouldComponentUpdate = (nextProps) => {
+// NOTATION : Ce if n'est pas nécesaire;
+// `if (a) return true; return false;`
+// est équivalent à :
+// `return a`
+// Quand a est déjà un boolean
     if(nextProps.sideBarState !== this.props.sideBarState || nextProps.users !== this.props.users)
       return true;
     return false;
   }
 
   render() {
+// NOTATION: Pas fan des id="" dans du dom, surtout qu'ici ils ne servent pas ...
     return (
       <div id="mySidenav" className={`sidenav ${this.props.sideBarState}`}>
     		<a className="closebtn" onClick={this.props.toggleSideBar}>&times;</a>
@@ -73,6 +83,7 @@ class ChatBoxContainer extends Component {
 
   shouldComponentUpdate = (nextProps) => nextProps.messages !== this.props.messages;
 
+// NOTATION: Potentiellement, si le composant se mettait à jour pour une autre raison que l'ajout d'un message, l'élément scrollerait vers le bas sans qu'on le veuille. Je pense qu'un algorithme qui fonctionnerait dans tous les cas serait bien plus complexe.
   componentDidUpdate = () => {
     let node = ReactDOM.findDOMNode(this);
     node.scrollTop = node.scrollHeight;
@@ -100,6 +111,11 @@ class ChatBoxContainer extends Component {
   }
 }
 
+// NOTATION: Pour la plupart de tes composants, tu pouvais écrire des functional components.
+// https://facebook.github.io/react/docs/components-and-props.html#functional-and-class-components
+// Ca a l'avantage d'être plus court en nombre de lignes, et aussi, un autre développeur voit tout
+// de suite que le composant n'a pas de state.
+// On peut quand même setter les proptypes sur un functional component
 class SendBoxContainer extends Component {
   static propTypes = {
     message: React.PropTypes.string.isRequired,

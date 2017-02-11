@@ -10,6 +10,7 @@ import io from 'socket.io-client';
 
 const socket = io.connect("localhost:2222/", {'forceNew':true });
 
+// NOTATION: Super d'utiliser un routeur !
 ReactDOM.render(
   <SocketProvider socket={socket}>
     <Router history={browserHistory}>

@@ -5,69 +5,73 @@ import users from './images/users.svg';
 import arrow from './images/arrow-left.svg';
 import enveloppe from './images/envelope.svg';
 
-class TopBarContainer extends Component {
-  static propTypes = {
-    username: React.PropTypes.string.isRequired,
-    toggleSideBar: React.PropTypes.func.isRequired,
-    disconnectUser: React.PropTypes.func.isRequired,
-    usersCount: React.PropTypes.number.isRequired
-  }
-
-  shouldComponentUpdate = (nextProps) => nextProps.usersCount !== this.props.usersCount;
-
-  render() {
-    return(
-		<header>
-		<img src={arrow} alt="arrow left back" onClick={this.props.disconnectUser}/>
-        <p>{this.props.username}</p>
-        <div><img src={users} alt="users" onClick={this.props.toggleSideBar}/></div>
-        <span className="badge">{this.props.usersCount}</span>
-      </header>
-    );
-  }
+const TopBarContainer = ({username, toggleSideBar, disconnectUser, usersCount}) => {
+  return (
+    <header>
+      <img src={arrow} alt="arrow left back" onClick={disconnectUser}/>
+      <p>{username}</p>
+      <div><img src={users} alt="users" onClick={toggleSideBar}/></div>
+      <span className="badge">{usersCount}</span>
+    </header>
+  );
+};
+TopBarContainer.propTypes = {
+  username: React.PropTypes.string.isRequired,
+  toggleSideBar: React.PropTypes.func.isRequired,
+  disconnectUser: React.PropTypes.func.isRequired,
+  usersCount: React.PropTypes.number.isRequired
 }
 
-class SideBarContainer extends Component {
-// NOTATION: Super pour les proptypes
-  static propTypes = {
-    sideBarState: React.PropTypes.oneOf(['apparent', 'hidden']).isRequired,
-    toggleSideBar: React.PropTypes.func.isRequired,
-    users: React.PropTypes.arrayOf(React.PropTypes.shape({
-      name: React.PropTypes.string,
-      id: React.PropTypes.number
-    })).isRequired
-  }
+const SideBarContainer = ({sideBarState, toggleSideBar, users}) => {
+  return (
+    <div className={`sidenav ${sideBarState}`}>
+      <a className="closebtn" onClick={toggleSideBar}>&times;</a>
+      {
+        users.map((user) => {
+          return (
+            <li key={user.id}>{user.name}</li>
+          );
+        })
+      }
+    </div>
+  );
+};
+SideBarContainer.propTypes = {
+  sideBarState: React.PropTypes.oneOf(['apparent', 'hidden']).isRequired,
+  toggleSideBar: React.PropTypes.func.isRequired,
+  users: React.PropTypes.arrayOf(React.PropTypes.shape({
+    name: React.PropTypes.string,
+    id: React.PropTypes.number
+  })).isRequired
+};
 
-// NOTATION: Pour info, dans la "vraie vie", on utiliserait pas autant shouldComponentUpdate,
-// c'était plus pour que tu ailles comprendre ce que c'est. Voila un article assez intéressant sur le sujet :
-// http://jamesknelson.com/should-i-use-shouldcomponentupdate/
-  shouldComponentUpdate = (nextProps) => {
-// NOTATION : Ce if n'est pas nécesaire;
-// `if (a) return true; return false;`
-// est équivalent à :
-// `return a`
-// Quand a est déjà un boolean
-    if(nextProps.sideBarState !== this.props.sideBarState || nextProps.users !== this.props.users)
-      return true;
-    return false;
-  }
+const SendBoxContainer = ({message, updateMessage, sendMessage}) => {
+  return (
+    <section className="write-message">
+      <SendBoxText message={message} updateMessage={updateMessage} />
+      <SendBoxSend sendMessage={sendMessage}/>
+    </section>
+  );
+};
+SendBoxContainer.propTypes = {
+  message: React.PropTypes.string.isRequired,
+  updateMessage: React.PropTypes.func.isRequired,
+  sendMessage: React.PropTypes.func.isRequired
+};
 
-  render() {
-// NOTATION: Pas fan des id="" dans du dom, surtout qu'ici ils ne servent pas ...
-    return (
-      <div id="mySidenav" className={`sidenav ${this.props.sideBarState}`}>
-    		<a className="closebtn" onClick={this.props.toggleSideBar}>&times;</a>
-          {
-            this.props.users.map((user) => {
-              return (
-                <li key={user.id}>{user.name}</li>
-              );
-            })
-          }
-    	</div>
-    );
-  }
-}
+const SendBoxText = ({message, updateMessage, sendMessage}) => {
+  const handleChange = (event) => updateMessage(event.target.value);
+  return (
+    <textarea rows="3" placeholder="Ecrire le message..." value={message} onChange={handleChange}></textarea>
+  );
+};
+SendBoxText.propTypes = {
+  message: React.PropTypes.string.isRequired,
+  updateMessage: React.PropTypes.func.isRequired
+};
+
+const SendBoxSend = ({sendMessage}) => <button onClick={sendMessage}><img src={enveloppe} alt="Icone envelope"/></button>;
+SendBoxSend.propTypes = { sendMessage: React.PropTypes.func.isRequired };
 
 class ChatBoxContainer extends Component {
   static propTypes = {
@@ -83,9 +87,10 @@ class ChatBoxContainer extends Component {
 
   shouldComponentUpdate = (nextProps) => nextProps.messages !== this.props.messages;
 
-// NOTATION: Potentiellement, si le composant se mettait à jour pour une autre raison que l'ajout d'un message, l'élément scrollerait vers le bas sans qu'on le veuille. Je pense qu'un algorithme qui fonctionnerait dans tous les cas serait bien plus complexe.
-  componentDidUpdate = () => {
-    let node = ReactDOM.findDOMNode(this);
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.messages === this.props.messages)
+      return;
+    const node = ReactDOM.findDOMNode(this);
     node.scrollTop = node.scrollHeight;
   }
 
@@ -99,69 +104,14 @@ class ChatBoxContainer extends Component {
             return (
               <div className={this.checkUserId(message.userId)} key={message.id}>
                 <p className="date">{message.user} le {message.date}</p>
-        				<div className="post">
-        					<p>{message.text}</p>
-        				</div>
+                <div className="post">
+                  <p>{message.text}</p>
+                </div>
               </div>
             );
           })
         }
       </section>
-    );
-  }
-}
-
-// NOTATION: Pour la plupart de tes composants, tu pouvais écrire des functional components.
-// https://facebook.github.io/react/docs/components-and-props.html#functional-and-class-components
-// Ca a l'avantage d'être plus court en nombre de lignes, et aussi, un autre développeur voit tout
-// de suite que le composant n'a pas de state.
-// On peut quand même setter les proptypes sur un functional component
-class SendBoxContainer extends Component {
-  static propTypes = {
-    message: React.PropTypes.string.isRequired,
-    updateMessage: React.PropTypes.func.isRequired,
-    sendMessage: React.PropTypes.func.isRequired
-  }
-
-  shouldComponentUpdate = (nextProps) => nextProps.message !== this.props.message;
-
-  render() {
-    return (
-      <section className="write-message">
-        <SendBoxText message={this.props.message} updateMessage={this.props.updateMessage} />
-        <SendBoxSend sendMessage={this.props.sendMessage}/>
-      </section>
-    );
-  }
-}
-
-class SendBoxText extends Component {
-  static propTypes = {
-    message: React.PropTypes.string.isRequired,
-    updateMessage: React.PropTypes.func.isRequired
-  }
-
-  shouldComponentUpdate = (nextProps) => nextProps.message !== this.props.message;
-
-  handleChange = (event) => this.props.updateMessage(event.target.value);
-
-  render() {
-    return (
-      <textarea rows="3" placeholder="Ecrire le message..." value={this.props.message} onChange={this.handleChange}></textarea>
-    );
-  }
-}
-
-class SendBoxSend extends Component {
-  static propTypes = {
-    sendMessage: React.PropTypes.func.isRequired
-  }
-
-  shouldComponentUpdate = (nextProps) => false;
-
-  render() {
-    return (
-      <button onClick={this.props.sendMessage}><img src={enveloppe} alt="Icone envelope"/></button>
     );
   }
 }
@@ -222,7 +172,7 @@ class Chatroom extends Component {
 
   sendMessage = () => {
     if(!this.state.message)
-      return;
+    return;
 
     this.props.socket.emit('new message', {
       user: this.formatName(this.props.params.username),
@@ -251,25 +201,25 @@ class Chatroom extends Component {
           users={this.state.activeUsers}
           toggleSideBar={this.toggleSideBar}
           sideBarState={this.state.sideBarState}
-        />
+          />
         <TopBarContainer
           username={this.formatName(this.props.params.username)}
           toggleSideBar={this.toggleSideBar}
           disconnectUser={this.disconnectUser}
           usersCount={this.state.activeUsers.length}
-        />
+          />
         <ChatBoxContainer
           messages={this.state.history}
           userId={this.state.userId
           }/>
-    		<SendBoxContainer
-          message={this.state.message}
-          updateMessage={this.updateMessage}
-          sendMessage={this.sendMessage}
-        />
-    	</main>
-    );
+          <SendBoxContainer
+            message={this.state.message}
+            updateMessage={this.updateMessage}
+            sendMessage={this.sendMessage}
+            />
+        </main>
+      );
+    }
   }
-}
 
-export default socketConnect(Chatroom);
+  export default socketConnect(Chatroom);

@@ -144,7 +144,6 @@ class Chatroom extends Component {
 
   _initializeData = (data) => {
     this.setState({
-      history: data.history,
       activeUsers: data.activeUsers,
       userId: data.userId
     });

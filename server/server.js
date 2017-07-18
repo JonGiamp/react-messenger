@@ -1,9 +1,9 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
-var port = 2222;
-var model = {
+const port = 2222;
+const model = {
   users: [
     // {name: "TEST", userId: 1, socketId: "4515efs2wsc" },
     // {name: "SERVEUR", userId: 2, socketId: "qzdq84d5d1q2s" }
@@ -14,10 +14,10 @@ var model = {
   ]
 };
 
-var monthName = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+const monthName = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
-var messageId = 0;
-var userId = 0;
+let messageId = 0;
+let userId = 0;
 
 function findUserIndex(socketId) {
   for(var i = 0; i < model.users.length; i++) {
@@ -28,28 +28,27 @@ function findUserIndex(socketId) {
 }
 
 function disconnectUser(socketId) {
-  var index = findUserIndex(socketId);
+  const index = findUserIndex(socketId);
   model.users = model.users.slice(0, index).concat(model.users.slice(index + 1));
   return index;
 }
 
 function stringifyDate(date) {
-  var day = date.getDate();
-  var month = monthName[date.getMonth()];
-  var year = date.getFullYear();
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  return day+" "+month+" "+year+" à "+hours+"h"+minutes;
+  const day = date.getDate();
+  const month = monthName[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  return `${day} ${month} ${year} & ${hours}h${minutes}`;
 }
 
 io.on('connection', function(socket){
   socket.on('new user', function(data) {
-    var currentUser = {name: data.user, userId: userId, socketId: socket.id };
+    const currentUser = {name: data.user, userId: userId, socketId: socket.id };
     model.users.push(currentUser);
 
     // Send message to current user
     io.to(socket.id).emit('initialize data', {
-      history: model.history,
       activeUsers: model.users,
       userId: userId
     });
@@ -64,7 +63,7 @@ io.on('connection', function(socket){
 
   socket.on('new message', function(data) {
     messageId++;
-    var date = stringifyDate(new Date());
+    const date = stringifyDate(new Date());
 
     model.history.push({
       user: data.user,
@@ -95,6 +94,6 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(port, function(){
+http.listen(port, function() {
   console.log('listening on *:'+port);
 });
